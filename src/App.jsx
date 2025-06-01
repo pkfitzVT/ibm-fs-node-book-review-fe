@@ -24,8 +24,9 @@ function App() {
                     <Link to="/search/title" style={{ marginRight: "1rem" }}>
                         Search (by Title)
                     </Link>
+                    <Link to="/register" style={{ marginRight: "1rem" }}>Register</Link>
                     <Link to="/login" style={{ marginRight: "1rem" }}>Login</Link>
-                    <Link to="/register">Register</Link>
+
                 </nav>
             </header>
             <main style={{ padding: "1rem" }}>
@@ -36,8 +37,8 @@ function App() {
                     <Route path="/search/author" element={<SearchByAuthor />} />
                     <Route path="/search/title" element={<SearchByTitle />} />
                     <Route path="/book/:isbn" element={<BookDetails />} />
-                    <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />
+                    <Route path="/login" element={<LoginForm />} />
                 </Routes>
             </main>
         </Router>

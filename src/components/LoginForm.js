@@ -1,6 +1,7 @@
 // src/components/LoginForm.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import FormMessage from "../components/FormMessage";
 
 export default function LoginForm() {
     const [username, setUsername] = useState("");
@@ -91,17 +92,7 @@ export default function LoginForm() {
                 </button>
             </form>
 
-            {message && (
-                <div
-                    style={{
-                        marginTop: "1rem",
-                        color: isError ? "red" : "green",
-                        whiteSpace: "pre-wrap",
-                    }}
-                >
-                    {message}
-                </div>
-            )}
+            {message && <FormMessage type={isError ? "error" : "success"}>{message}</FormMessage>}
         </div>
     );
 }

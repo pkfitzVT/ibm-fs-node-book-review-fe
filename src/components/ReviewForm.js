@@ -1,6 +1,6 @@
 // src/components/ReviewForm.jsx
 import { useState } from "react";
-
+import FormMessage from "../components/FormMessage";
 export default function ReviewForm({ isbn, onReviewSubmitted }) {
     const [reviewText, setReviewText] = useState("");
     const [loading, setLoading] = useState(false);
@@ -74,17 +74,7 @@ export default function ReviewForm({ isbn, onReviewSubmitted }) {
                     {loading ? "Submitting…" : "Submit Review"}
                 </button>
             </form>
-            {message && (
-                <div
-                    style={{
-                        marginTop: "0.5rem",
-                        color: isError ? "red" : "green",
-                        whiteSpace: "pre-wrap",
-                    }}
-                >
-                    {message}
-                </div>
-            )}
+            {message && <FormMessage type={isError ? "error" : "success"}>{message}</FormMessage>}
         </div>
     );
 }

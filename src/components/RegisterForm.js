@@ -1,6 +1,7 @@
 // src/components/RegisterForm.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import FormMessage from "../components/FormMessage";
 
 export default function RegisterForm() {
     const [username, setUsername] = useState("");
@@ -17,7 +18,7 @@ export default function RegisterForm() {
         setIsError(false);
 
         try {
-            // 1) POST to /register (CRA proxies to http://localhost:5000/register)
+            // 1) POST to /register…
             const res = await fetch("/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -27,7 +28,7 @@ export default function RegisterForm() {
             const payload = await res.json(); // { token?, message }
 
             if (!res.ok) {
-                // Backend returned 400 or 409 with { message: “…” }
+                // Backend returned 400 or 409
                 setIsError(true);
                 setMessage(payload.message || `Error ${res.status}`);
             } else {
@@ -35,19 +36,15 @@ export default function RegisterForm() {
                 setIsError(false);
                 setMessage(payload.message || "Registered successfully!");
                 if (payload.token) {
-                    // Save JWT in localStorage if you want to auto‐log in:
                     localStorage.setItem("token", payload.token);
                 }
-                // Clear form fields
                 setUsername("");
                 setPassword("");
-                // Redirect to login page after a short delay (or immediately)
                 setTimeout(() => {
                     navigate("/login");
-                }, 1000); // 1s delay so user can read the success message
+                }, 1000);
             }
         } catch (err) {
-            // Network or unexpected error
             setIsError(true);
             setMessage("Unexpected error. Please try again.");
             console.error("Register error:", err);
@@ -94,15 +91,9 @@ export default function RegisterForm() {
             </form>
 
             {message && (
-                <div
-                    style={{
-                        marginTop: "1rem",
-                        color: isError ? "red" : "green",
-                        whiteSpace: "pre-wrap",
-                    }}
-                >
+                <FormMessage type={isError ? "error" : "success"}>
                     {message}
-                </div>
+                </FormMessage>
             )}
         </div>
     );

@@ -1,8 +1,8 @@
 // src/components/BookDetails.jsx
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getBookByIsbn, getReviewsByIsbn } from "../services/api";
+import ReviewForm from "./ReviewForm";
 
 export default function BookDetails() {
     const { isbn } = useParams();
@@ -13,6 +13,7 @@ export default function BookDetails() {
     const [errorBook, setErrorBook] = useState(null);
     const [errorReviews, setErrorReviews] = useState(null);
 
+    // Fetch book data
     useEffect(() => {
         async function fetchBook() {
             try {
@@ -27,19 +28,28 @@ export default function BookDetails() {
         fetchBook();
     }, [isbn]);
 
-    useEffect(() => {
-        async function fetchReviews() {
-            try {
-                const data = await getReviewsByIsbn(isbn);
-                setReviews(data);
-            } catch (err) {
-                setErrorReviews(err.message);
-            } finally {
-                setLoadingReviews(false);
-            }
+    // Fetch reviews
+    async function loadReviews() {
+        setLoadingReviews(true);
+        setErrorReviews(null);
+        try {
+            const data = await getReviewsByIsbn(isbn);
+            setReviews(data);
+        } catch (err) {
+            setErrorReviews(err.message);
+        } finally {
+            setLoadingReviews(false);
         }
-        fetchReviews();
+    }
+
+    useEffect(() => {
+        loadReviews();
     }, [isbn]);
+
+    // Helper to detect if user is “logged in”
+    // We assume a JWT is stored in localStorage under “token”.
+    // (Your backend actually checks the session cookie, but for simplicity we gate the UI by token presence.)
+    const isLoggedIn = Boolean(localStorage.getItem("token"));
 
     if (loadingBook) return <div>Loading book details…</div>;
     if (errorBook) return <div style={{ color: "red" }}>Error: {errorBook}</div>;
@@ -62,27 +72,36 @@ export default function BookDetails() {
 
             <hr />
 
+            {/* Reviews Section */}
+            <h3>Reviews</h3>
             {loadingReviews ? (
                 <div>Loading reviews…</div>
             ) : errorReviews ? (
                 <div style={{ color: "red" }}>Error: {errorReviews}</div>
             ) : Array.isArray(reviews) ? (
                 reviews.length > 0 ? (
-                    <div>
-                        <h3>Reviews:</h3>
-                        <ul>
-                            {reviews.map((r, idx) => (
-                                <li key={idx}>
-                                    <strong>{r.user}:</strong> {r.reviewText}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    <ul>
+                        {reviews.map((r, idx) => (
+                            <li key={idx} style={{ marginBottom: "0.5rem" }}>
+                                <strong>{r.user}:</strong> {r.reviewText}
+                            </li>
+                        ))}
+                    </ul>
                 ) : (
-                    <p>{reviews.message || "No reviews yet."}</p>
+                    <p>No reviews yet. Be the first to review!</p>
                 )
             ) : (
+                // When the backend returns a “message” instead of an array:
                 <p>{reviews.message}</p>
+            )}
+
+            {/* Review Form or Prompt to Log In */}
+            {isLoggedIn ? (
+                <ReviewForm isbn={isbn} onReviewSubmitted={loadReviews} />
+            ) : (
+                <p>
+                    <Link to="/login">Log in</Link> to add or modify your review.
+                </p>
             )}
 
             <p>

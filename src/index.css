@@ -1,13 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* TEST RULE – will be removed later */
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;  /* always fill the viewport */
+  /* purple-to-indigo gradient */
+  background: linear-gradient(to right, #6b46c1, #4338ca, #1e3a8a);
+  color: #f8fafc;     /* light gray/white text for contrast */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Example heading/link presets (optional) */
+h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
+a  { color: #c7d2fe; text-decoration: underline; }
+a:hover { color: #e0e7ff; }
+
+/* Highlight nav links on hover / active */
+.nav-link:hover,
+.nav-link.active {
+  color: #f8fafc;           /* bright white on hover */
+  text-decoration: underline;
 }

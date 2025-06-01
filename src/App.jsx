@@ -6,6 +6,9 @@ import BookDetails from "./components/BookDetails";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import SplashPage from "./components/SplashPage";
+import SearchByAuthor from "./components/SearchByAuthor";
+import SearchByTitle from "./components/SearchByTitle";
+
 
 function App() {
     return (
@@ -15,6 +18,12 @@ function App() {
                     <Link to="/" style={{ marginRight: "1rem" }}>Home</Link>
                     <Link to="/browse" style={{ marginRight: "1rem" }}>Browse</Link>
                     <Link to="/search" style={{ marginRight: "1rem" }}>Search</Link>
+                    <Link to="/search/author" style={{ marginRight: "1rem" }}>
+                        Search (by Author)
+                    </Link>
+                    <Link to="/search/title" style={{ marginRight: "1rem" }}>
+                        Search (by Title)
+                    </Link>
                     <Link to="/login" style={{ marginRight: "1rem" }}>Login</Link>
                     <Link to="/register">Register</Link>
                 </nav>
@@ -24,6 +33,8 @@ function App() {
                     <Route path="/" element={<SplashPage />} />
                     <Route path="/browse" element={<BrowseBooks />} />
                     <Route path="/search" element={<SearchBooks />} />
+                    <Route path="/search/author" element={<SearchByAuthor />} />
+                    <Route path="/search/title" element={<SearchByTitle />} />
                     <Route path="/book/:isbn" element={<BookDetails />} />
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />

@@ -50,3 +50,45 @@ export async function getReviewsByIsbn(isbn) {
     }
     return res.json(); // either { message: "Please review ..." } or [ { user, reviewText }, ... ]
 }
+/**
+ * GET /author/:author
+ * Returns an array of books whose `author` exactly matches the route param.
+ */
+export async function getBooksByAuthor(author) {
+    const res = await fetch(`/author/${encodeURIComponent(author)}`);
+    if (!res.ok) {
+        // Try to pull message from JSON if possible
+        let msg = `Error ${res.status}`;
+        try {
+            const payload = await res.json();
+            if (payload.message) msg = payload.message;
+        } catch {}
+        throw new Error(msg);
+    }
+    return res.json(); // should be an array of book objects
+}
+
+// src/services/api.js
+
+// … existing imports and functions …
+
+/**
+ * GET /title/:title
+ * Returns an array of books whose title exactly matches the parameter.
+ */
+export async function getBooksByTitle(title) {
+    const res = await fetch(`/title/${encodeURIComponent(title)}`);
+    if (!res.ok) {
+        let errMsg = `Error ${res.status}`;
+        try {
+            const payload = await res.json();
+            if (payload.message) {
+                errMsg = payload.message;
+            }
+        } catch {
+            // ignore parse errors
+        }
+        throw new Error(errMsg);
+    }
+    return res.json(); // an array of { isbn, title, author, … }
+}
